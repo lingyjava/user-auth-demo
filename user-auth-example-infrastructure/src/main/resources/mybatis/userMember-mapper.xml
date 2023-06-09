@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ly.user.UserMemberMapper">
+  <resultMap type="com.ly.domain.user.UserMember" id="UserMemberMap">
+    <result property="userId" column="user_id" jdbcType="BIGINT"/>
+    <result property="userLoginName" column="user_login_name" jdbcType="VARCHAR"/>
+    <result property="userRealName" column="user_real_name" jdbcType="VARCHAR"/>
+    <result property="email" column="email" jdbcType="VARCHAR"/>
+    <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+    <result property="password" column="password" jdbcType="VARCHAR"/>
+    <result property="salt" column="salt" jdbcType="VARCHAR"/>
+    <result property="createBy" column="create_by" jdbcType="BIGINT"/>
+    <result property="createByName" column="create_by_name" jdbcType="VARCHAR"/>
+    <result property="createTime" column="create_time" jdbcType="DATETIME"/>
+    <result property="updateBy" column="update_by" jdbcType="BIGINT"/>
+    <result property="updateByName" column="update_by_name" jdbcType="VARCHAR"/>
+    <result property="updateTime" column="update_time" jdbcType="DATETIME"/>
+  </resultMap>
+
+  <!-- 通过ID查询单条数据 -->
+  <select id="queryById" resultMap="UserMemberMap">
+    select
+      user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time
+    from user_member
+    where user_id = #{userId}
+  </select>
+
+  <!--分页查询指定行数据-->
+  <select id="queryAllByLimit" resultMap="UserMemberMap">
+    select
+    user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time
+    from user_member
+    <where>
+      <if test="userId != null and userId != ''">
+        and user_id = #{userId}
+      </if>
+      <if test="userLoginName != null and userLoginName != ''">
+        and user_login_name = #{userLoginName}
+      </if>
+      <if test="userRealName != null and userRealName != ''">
+        and user_real_name = #{userRealName}
+      </if>
+      <if test="email != null and email != ''">
+        and email = #{email}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="password != null and password != ''">
+        and password = #{password}
+      </if>
+      <if test="salt != null and salt != ''">
+        and salt = #{salt}
+      </if>
+      <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+      </if>
+      <if test="createByName != null and createByName != ''">
+        and create_by_name = #{createByName}
+      </if>
+      <if test="createTime != null and createTime != ''">
+        and create_time = #{createTime}
+      </if>
+      <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+      </if>
+      <if test="updateByName != null and updateByName != ''">
+        and update_by_name = #{updateByName}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+        and update_time = #{updateTime}
+      </if>
+    </where>
+    limit #{pageable.offset}, #{pageable.pageSize}
+  </select>
+
+  <!--统计总行数-->
+  <select id="count" resultType="java.lang.Long">
+    select count(1)
+    from user_member
+    <where>
+      <if test="userId != null and userId != ''">
+        and user_id = #{userId}
+      </if>
+      <if test="userLoginName != null and userLoginName != ''">
+        and user_login_name = #{userLoginName}
+      </if>
+      <if test="userRealName != null and userRealName != ''">
+        and user_real_name = #{userRealName}
+      </if>
+      <if test="email != null and email != ''">
+        and email = #{email}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="password != null and password != ''">
+        and password = #{password}
+      </if>
+      <if test="salt != null and salt != ''">
+        and salt = #{salt}
+      </if>
+      <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+      </if>
+      <if test="createByName != null and createByName != ''">
+        and create_by_name = #{createByName}
+      </if>
+      <if test="createTime != null and createTime != ''">
+        and create_time = #{createTime}
+      </if>
+      <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+      </if>
+      <if test="updateByName != null and updateByName != ''">
+        and update_by_name = #{updateByName}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+        and update_time = #{updateTime}
+      </if>
+    </where>
+  </select>
+
+  <!--新增数据-->
+  <insert id="insert" keyProperty="user_id" useGeneratedKeys="true">
+    insert into user_member(user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time)
+    values (#{userId},#{userLoginName},#{userRealName},#{email},#{mobile},#{password},#{salt},#{createBy},#{createByName},#{createTime},#{updateBy},#{updateByName},#{updateTime})
+  </insert>
+
+  <!-- 批量新增数据 -->
+  <insert id="insertBatch" keyProperty="user_id" useGeneratedKeys="true">
+    insert into user_member(user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.userId},#{entity.userLoginName},#{entity.userRealName},#{entity.email},#{entity.mobile},#{entity.password},#{entity.salt},#{entity.createBy},#{entity.createByName},#{entity.createTime},#{entity.updateBy},#{entity.updateByName},#{entity.updateTime})
+    </foreach>
+  </insert>
+
+  <!-- 批量新增或按主键更新数据 -->
+  <insert id="insertOrUpdateBatch" keyProperty="user_id" useGeneratedKeys="true">
+    insert into user_member(user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.userId},#{entity.userLoginName},#{entity.userRealName},#{entity.email},#{entity.mobile},#{entity.password},#{entity.salt},#{entity.createBy},#{entity.createByName},#{entity.createTime},#{entity.updateBy},#{entity.updateByName},#{entity.updateTime})
+    </foreach>
+    on duplicate key update
+    user_id=values(user_id),
+    user_login_name=values(user_login_name),
+    user_real_name=values(user_real_name),
+    email=values(email),
+    mobile=values(mobile),
+    password=values(password),
+    salt=values(salt),
+    create_by=values(create_by),
+    create_by_name=values(create_by_name),
+    create_time=values(create_time),
+    update_by=values(update_by),
+    update_by_name=values(update_by_name),
+    update_time=values(update_time)
+  </insert>
+
+  <!-- 更新数据 -->
+  <update id="update">
+    update user_member
+    <set>
+      <if test="userId != null and userId != ''">
+        user_id = #{userId},
+      </if>
+      <if test="userLoginName != null and userLoginName != ''">
+        user_login_name = #{userLoginName},
+      </if>
+      <if test="userRealName != null and userRealName != ''">
+        user_real_name = #{userRealName},
+      </if>
+      <if test="email != null and email != ''">
+        email = #{email},
+      </if>
+      <if test="mobile != null and mobile != ''">
+        mobile = #{mobile},
+      </if>
+      <if test="password != null and password != ''">
+        password = #{password},
+      </if>
+      <if test="salt != null and salt != ''">
+        salt = #{salt},
+      </if>
+      <if test="createBy != null and createBy != ''">
+        create_by = #{createBy},
+      </if>
+      <if test="createByName != null and createByName != ''">
+        create_by_name = #{createByName},
+      </if>
+      <if test="createTime != null and createTime != ''">
+        create_time = #{createTime},
+      </if>
+      <if test="updateBy != null and updateBy != ''">
+        update_by = #{updateBy},
+      </if>
+      <if test="updateByName != null and updateByName != ''">
+        update_by_name = #{updateByName},
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where user_id = #{userId}
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteById">
+    delete from user_member where user_id = #{userId}
+  </delete>
+</mapper>
