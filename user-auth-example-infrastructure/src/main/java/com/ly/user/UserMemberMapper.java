@@ -4,12 +4,7 @@ import com.ly.domain.user.UserMember;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-import .entity.UserMember;
-
-import java.util.List;
 
 /**
  * userMember(接口定义)

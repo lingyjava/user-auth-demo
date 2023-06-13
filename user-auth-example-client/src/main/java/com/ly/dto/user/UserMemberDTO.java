@@ -1,4 +1,4 @@
-package com.ly.dto;
+package com.ly.dto.user;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
