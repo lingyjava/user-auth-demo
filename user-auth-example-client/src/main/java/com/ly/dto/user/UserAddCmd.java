@@ -16,4 +16,6 @@ public class UserAddCmd {
 
     private UserMemberDTO userMemberDTO;
 
+    private VerifyCodeDTO verifyCodeDTO;
+
 }

@@ -1,5 +1,6 @@
 package com.ly.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.ScanOptions;
@@ -7,7 +8,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -23,8 +23,12 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
 
-    @Resource
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    public RedisUtil(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public void setRedisTemplate(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
