@@ -18,5 +18,5 @@ public class UserLoginCmd {
 
     private String password;
 
-    private String verifyCode;
+    private VerifyCodeDTO verifyCodeDTO;
 }

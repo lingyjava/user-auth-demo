@@ -1,6 +1,11 @@
 package com.ly.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import com.alibaba.cola.dto.Response;
+import com.alibaba.cola.dto.SingleResponse;
+import com.ly.domain.user.UserMember;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @createTime 2023年06月15日 10:08:00
  */
 @RestController
+@RequestMapping("/get")
 public class HelloWorldController {
 
-    @GetMapping(value = "/helloworld")
-    public String helloWorld(){
-        return "Hello, world!";
+    @PostMapping(value = "/hello")
+    public Response hello(@RequestBody UserMember user){
+        return SingleResponse.of(String.format("Hello, %s!", user.getUserLoginName()));
     }
 }

@@ -1,6 +1,7 @@
 package com.ly.user;
 
 import com.alibaba.cola.dto.Response;
+import com.alibaba.cola.dto.SingleResponse;
 import com.alibaba.cola.exception.BizException;
 import com.ly.api.UserMemberServiceI;
 import com.ly.api.VerifyCodeServiceI;
@@ -9,10 +10,17 @@ import com.ly.dto.user.UserAddCmd;
 import com.ly.dto.user.UserLoginCmd;
 import com.ly.dto.user.UserMemberDTO;
 import com.ly.user.mapper.UserMemberMapper;
+import com.ly.utils.JwtTokenUtil;
 import com.ly.utils.PasswordUtil;
+import com.ly.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ling yuan
@@ -29,6 +37,9 @@ public class UserMemberServiceImpl implements UserMemberServiceI {
 
     @Autowired
     private VerifyCodeServiceI verifyCodeServiceI;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public void register(UserAddCmd cmd) {
@@ -69,11 +80,27 @@ public class UserMemberServiceImpl implements UserMemberServiceI {
         if (cmd == null || cmd.getUserLoginName() == null || cmd.getPassword() == null) {
             throw new BizException("500", "缺少必要参数");
         }
+        // 校验验证码
+        if (!verifyCodeServiceI.valid(cmd.getVerifyCodeDTO())) {
+            throw new BizException("500", "无效的验证码");
+        }
+        verifyCodeServiceI.del(cmd.getVerifyCodeDTO().getKey());
         // 校验密码
-        if (cmd.getPassword().length() < MIN_PASSWORD_LENGTH) {
-            throw new BizException("500", "密码长度不允许小于8位");
+        UserMember query = new UserMember();
+        query.setUserLoginName(cmd.getUserLoginName());
+        List<UserMember> members = userMemberMapper.queryAllByLimit(query, PageRequest.of(0, 1));
+        if (CollectionUtils.isEmpty(members)) {
+            throw new BizException("500", "用户不存在");
+        }
+        UserMember member = members.get(0);
+        if (!PasswordUtil.encrypt(cmd.getPassword(), member.getSalt()).equals(member.getPassword())) {
+            throw new BizException("500", "用户名或密码错误");
         }
 
-        return null;
+        // 生成token
+        String token = JwtTokenUtil.token(member.getUserLoginName(), member.getPassword());
+
+        redisUtil.setEx(token, member.getUserLoginName(), 1, TimeUnit.DAYS);
+        return SingleResponse.of(token);
     }
 }

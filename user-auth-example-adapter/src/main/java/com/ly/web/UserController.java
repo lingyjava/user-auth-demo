@@ -6,6 +6,7 @@ import com.ly.api.UserMemberServiceI;
 import com.ly.api.VerifyCodeServiceI;
 import com.ly.dto.data.ErrorCode;
 import com.ly.dto.user.UserAddCmd;
+import com.ly.dto.user.UserLoginCmd;
 import com.ly.dto.user.VerifyCodeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,14 @@ public class UserController {
     }
 
     /**
+     * 用户登录
+     * */
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public Response login(@RequestBody UserLoginCmd cmd, HttpServletRequest request, HttpServletResponse response) {
+        return userMemberServiceI.login(cmd);
+    }
+
+    /**
      * 用户登录/注册校验码生成
      */
     @RequestMapping(path = "/getVerifyCodePic",method = RequestMethod.GET)
@@ -49,6 +58,5 @@ public class UserController {
         VerifyCodeDTO result = verifyCodeServiceI.get();
         return result != null ? SingleResponse.of(result) : SingleResponse.buildFailure(ErrorCode.B_OTHER_EXCEPTION.getErrCode(), "生成验证码失败");
     }
-
 
 }
