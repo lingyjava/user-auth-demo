@@ -1,10 +1,11 @@
-package com.ly.user;
+package com.ly.user.mapper;
 
 import com.ly.domain.user.UserMember;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * userMember(接口定义)
@@ -28,7 +29,7 @@ public interface UserMemberMapper{
      * @param pageable 分页对象
      * @return 对象列表
      */
-    List<UserMember> queryAllByLimit(UserMember userMember, @Param("pageable") Pageable pageable);
+    List<UserMember> queryAllByLimit(@Param("param") UserMember userMember, @Param("pageable") Pageable pageable);
     /**
      * 统计总行数
      *

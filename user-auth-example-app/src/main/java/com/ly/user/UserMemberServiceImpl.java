@@ -8,14 +8,11 @@ import com.ly.domain.user.UserMember;
 import com.ly.dto.user.UserAddCmd;
 import com.ly.dto.user.UserLoginCmd;
 import com.ly.dto.user.UserMemberDTO;
+import com.ly.user.mapper.UserMemberMapper;
 import com.ly.utils.PasswordUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 /**
  * @author ling yuan
@@ -52,8 +49,8 @@ public class UserMemberServiceImpl implements UserMemberServiceI {
         // 校验用户名
         UserMember query = new UserMember();
         query.setUserLoginName(userMember.getUserLoginName());
-        List<UserMember> members = userMemberMapper.queryAllByLimit(query, PageRequest.of(0, 1));
-        if (!CollectionUtils.isEmpty(members)) {
+        // List<UserMember> members = userMemberMapper.queryAllByLimit(query, PageRequest.of(0, 1));
+        if (userMemberMapper.count(query) > 0) {
             throw new BizException("500", "用户名已存在");
         }
 
@@ -62,8 +59,9 @@ public class UserMemberServiceImpl implements UserMemberServiceI {
         String encryptPassword = PasswordUtil.encrypt(userMember.getPassword(), salt);
         userMember.setPassword(encryptPassword);
         userMember.setSalt(salt);
-        userMemberMapper.insert(userMember);
 
+        verifyCodeServiceI.del(cmd.getVerifyCodeDTO().getKey());
+        userMemberMapper.insert(userMember);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.ly.dto.data.ErrorCode;
 import com.ly.dto.user.UserAddCmd;
 import com.ly.dto.user.VerifyCodeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class UserController {
      * 用户注册
      * */
     @RequestMapping(path = "/register", method = RequestMethod.POST)
-    public Response register(UserAddCmd cmd, HttpServletRequest request, HttpServletResponse response) {
+    public Response register(@RequestBody UserAddCmd cmd, HttpServletRequest request, HttpServletResponse response) {
         userMemberServiceI.register(cmd);
         return Response.buildSuccess();
     }

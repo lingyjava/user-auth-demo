@@ -67,7 +67,7 @@ public class VerifyCodeServiceImpl implements VerifyCodeServiceI {
     }
 
     @Override
-    public Boolean remove(String key) {
-        // return redisUtil.delete(key);
+    public void del(String key) {
+        redisUtil.delete(key);
     }
 }

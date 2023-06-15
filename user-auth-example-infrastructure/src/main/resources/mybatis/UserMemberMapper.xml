@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ly.user.UserMemberMapper">
+<mapper namespace="com.ly.user.mapper.UserMemberMapper">
+
   <resultMap type="com.ly.domain.user.UserMember" id="UserMemberMap">
     <result property="userId" column="user_id" jdbcType="BIGINT"/>
     <result property="userLoginName" column="user_login_name" jdbcType="VARCHAR"/>
@@ -11,10 +12,10 @@
     <result property="salt" column="salt" jdbcType="VARCHAR"/>
     <result property="createBy" column="create_by" jdbcType="BIGINT"/>
     <result property="createByName" column="create_by_name" jdbcType="VARCHAR"/>
-    <result property="createTime" column="create_time" jdbcType="DATETIME"/>
+    <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     <result property="updateBy" column="update_by" jdbcType="BIGINT"/>
     <result property="updateByName" column="update_by_name" jdbcType="VARCHAR"/>
-    <result property="updateTime" column="update_time" jdbcType="DATETIME"/>
+    <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
   </resultMap>
 
   <!-- 通过ID查询单条数据 -->
@@ -31,44 +32,44 @@
     user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time
     from user_member
     <where>
-      <if test="userId != null and userId != ''">
-        and user_id = #{userId}
+      <if test="param.userId != null">
+        and user_id = #{param.userId}
       </if>
-      <if test="userLoginName != null and userLoginName != ''">
-        and user_login_name = #{userLoginName}
+      <if test="param.userLoginName != null and param.userLoginName != ''">
+        and user_login_name = #{param.userLoginName}
       </if>
-      <if test="userRealName != null and userRealName != ''">
-        and user_real_name = #{userRealName}
+      <if test="param.userRealName != null and param.userRealName != ''">
+        and user_real_name = #{param.userRealName}
       </if>
-      <if test="email != null and email != ''">
-        and email = #{email}
+      <if test="param.email != null and param.email != ''">
+        and email = #{param.email}
       </if>
-      <if test="mobile != null and mobile != ''">
-        and mobile = #{mobile}
+      <if test="param.mobile != null and param.mobile != ''">
+        and mobile = #{param.mobile}
       </if>
-      <if test="password != null and password != ''">
-        and password = #{password}
+      <if test="param.password != null and param.password != ''">
+        and password = #{param.password}
       </if>
-      <if test="salt != null and salt != ''">
-        and salt = #{salt}
+      <if test="param.salt != null and param.salt != ''">
+        and salt = #{param.salt}
       </if>
-      <if test="createBy != null and createBy != ''">
-        and create_by = #{createBy}
+      <if test="param.createBy != null">
+        and create_by = #{param.createBy}
       </if>
-      <if test="createByName != null and createByName != ''">
-        and create_by_name = #{createByName}
+      <if test="param.createByName != null and param.createByName != ''">
+        and create_by_name = #{param.createByName}
       </if>
-      <if test="createTime != null and createTime != ''">
+      <if test="param.createTime != null">
         and create_time = #{createTime}
       </if>
-      <if test="updateBy != null and updateBy != ''">
-        and update_by = #{updateBy}
+      <if test="param.updateBy != null">
+        and update_by = #{param.updateBy}
       </if>
-      <if test="updateByName != null and updateByName != ''">
-        and update_by_name = #{updateByName}
+      <if test="param.updateByName != null and param.updateByName != ''">
+        and update_by_name = #{param.updateByName}
       </if>
-      <if test="updateTime != null and updateTime != ''">
-        and update_time = #{updateTime}
+      <if test="param.updateTime != null">
+        and update_time = #{param.updateTime}
       </if>
     </where>
     limit #{pageable.offset}, #{pageable.pageSize}
@@ -122,13 +123,13 @@
   </select>
 
   <!--新增数据-->
-  <insert id="insert" keyProperty="user_id" useGeneratedKeys="true">
+  <insert id="insert" keyProperty="userId" keyColumn="user_id" useGeneratedKeys="true">
     insert into user_member(user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time)
     values (#{userId},#{userLoginName},#{userRealName},#{email},#{mobile},#{password},#{salt},#{createBy},#{createByName},#{createTime},#{updateBy},#{updateByName},#{updateTime})
   </insert>
 
   <!-- 批量新增数据 -->
-  <insert id="insertBatch" keyProperty="user_id" useGeneratedKeys="true">
+  <insert id="insertBatch" keyProperty="userId" keyColumn="user_id" useGeneratedKeys="true">
     insert into user_member(user_id,user_login_name,user_real_name,email,mobile,password,salt,create_by,create_by_name,create_time,update_by,update_by_name,update_time)
     values
     <foreach collection="entities" item="entity" separator=",">

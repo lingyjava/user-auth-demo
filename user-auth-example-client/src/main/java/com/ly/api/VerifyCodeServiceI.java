@@ -13,5 +13,5 @@ public interface VerifyCodeServiceI {
 
     Boolean valid(VerifyCodeDTO dto);
 
-    Boolean remove(String key);
+    void del(String key);
 }
