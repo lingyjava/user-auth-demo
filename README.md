@@ -1,7 +1,12 @@
 # 用户身份验证-实现示例
 
-架构：SpringBoot（COLA），MySQL（存储用户信息），Redis（存储验证码、token）。
-功能点：密码保密存储（加盐、加密算法），Filter（识别token将user信息传输到controller）。
+架构：SpringBoot（COLA），MySQL，Redis。
+
+功能点：
+- 验证码生成、校验。
+- token生成、认证。
+- 密码保密存储（加盐、加密算法）
+- Filter（识别token将user信息传输到controller）
 
 ## 提供过帮助的网站
 - [alibaba/COLA](https://github.com/alibaba/COLA/tree/master/cola-components)
